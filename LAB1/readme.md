@@ -1,8 +1,3 @@
-CS7051
-======
-
-Networks Applications
-
 Server side java programs:
 
 1. Service.java - Listen to thread, and take care of thread pool. Initiates a new thread for every new client.
