@@ -1,3 +1,6 @@
+/*
+   ServiceHandler.java - Handles the client messages exchange.
+*/
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -6,7 +9,8 @@ import java.net.Socket;
 
 /**
  *
- * @author anands@tcd.ie
+ * @author anands@tcd.ie, NDS course, Student ID 14303767
+ * Trinity College Dublin
  */
 
 public class ServiceHandler implements Runnable {
@@ -18,6 +22,7 @@ public class ServiceHandler implements Runnable {
 	private PrintWriter os;
         // InputStream for client socket connection
         private BufferedReader in;
+        Service service;
 	
 	public ServiceHandler(Socket socket){
 		this.socket = socket;
@@ -36,19 +41,19 @@ public class ServiceHandler implements Runnable {
 			while(!closed){
 				input_client = in.readLine();
 				if(input_client.startsWith("HELO")){
-                                        sentence = input_client+"IP: " +socket.getInetAddress() +"Port: " +socket.getLocalPort() +"StudentID:14303767 ";
+                                        sentence = input_client+"\nIP:"+socket.getLocalAddress()+"\nPort:"+socket.getLocalPort()+"\nStudentID:14303767"+"\nend";
 					os.println(sentence);
 				}
 				else if(input_client.equals("KILL_SERVICE")){
-					closed = true;
-                                        os.println("Connection Termination requested");
-					socket.close();
-					System.exit(1);
+                                        closed = true;
+                                        os.println("Connection Termination requested"+'\n');
+                                        //Kill all threads, for other connected clients as well.
+                                        new Service().killAll();
 				}
                                 // When clients writes some other command(String) to the server, 
                                 // server reply back with the same command (String)
 				else{
-                                        os.println(input_client);
+                                        os.println(input_client+"\nend");
 				}
 			}
 		} catch (IOException e) {
