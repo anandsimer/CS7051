@@ -24,23 +24,37 @@ public class Client {
             e.printStackTrace();
         }
     }
-    
-     public static void main(String args[]) throws Exception {
-        int port = Integer.parseInt(args[0]);
-        new Client(port).runClient();
+
+    public static void main(String args[]) throws Exception {
+        // int port = Integer.parseInt(args[0]);
+        new Client(7000).runClient();
     }
-    
+
     //  Function to communicate with the server service.
-     
     public void runClient() {
+        String reply = null;
         System.out.println("Client is running. Port No. " + port);
+
+        System.out.println("Please Input message:");
         while (closed) {
             try {
                 os = new DataOutputStream(socket.getOutputStream());
-                System.out.println("Input for Server: ");
                 os.writeBytes(cmdline_input.readLine() + "\n");
                 in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                System.out.println("Server: " + in.readLine());
+                while ((reply = in.readLine()) != null) {
+                    if (reply.equals("end")) {
+                        if (closed) {
+                            System.out.println("Please Input message:");
+                        }
+                        break;
+                    }
+                    if(reply.contains("Termination requested")){
+                       System.err.println("Closing this thread and all threads");
+                       socket.close();
+                       System.exit(1);
+                    }
+                    System.out.println("From Server:" + reply);
+                }
 
             } catch (Exception e) {
                 closed = false;
