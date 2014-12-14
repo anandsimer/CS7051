@@ -1,3 +1,3 @@
 #!/bin/sh
 
-javac *.java 
+javac src/*.java 
