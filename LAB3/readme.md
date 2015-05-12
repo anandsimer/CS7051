@@ -17,13 +17,11 @@ There are Two main Java classes,
    I tried to run multiple clients to see the rejection of new client request, from thread dump analysis, what I found threads goes to standby state, as soon as the messages are exchanged, hence thread pool executor does not count them in as Active threads.   
    
 2) ChatClient.java
-   ---------------
-
+   
    This class needs to run by the user to join the chat room, this class makes socket connection to the Service class and takes the input of the user, and send it to the ChatServer program.
 	
 
 3)  ChatServerListener.java 
-    -----------------------
    
     The chat client thread. This client thread opens the input and the output streams for a particular client, ask the client's name, informs all the clients connected to the server about the fact that a new client has joined the chat room, and as long as it receive data, echos that data back to all other clients. When a client leaves the chat room this thread informs also all the clients about that and terminates.
 	 
